@@ -1,5 +1,7 @@
 package com.eddytnk.itemApi.service;
 
+import com.eddytnk.itemApi.exception.BusinessValidationException;
+import com.eddytnk.itemApi.exception.ResourceNotFoundException;
 import com.eddytnk.itemApi.model.Item;
 import com.eddytnk.itemApi.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +31,7 @@ public class ItemService {
     public Item getItem(Long id) {
         Optional<Item> itemOptional = itemRepository.findById(id);
         if (!itemOptional.isPresent()) {
-            throw new RuntimeException("Item not found.");
+            throw new ResourceNotFoundException("Item not found.");
         }
         return itemOptional.get();
     }
@@ -41,7 +43,7 @@ public class ItemService {
     public void updateItem(Long id, Item item) {
         Optional<Item> itemOptional = itemRepository.findById(id);
         if (!itemOptional.isPresent()) {
-            throw new RuntimeException("Item not found.");
+            throw new BusinessValidationException("Item to be updated those not exit found.");
         }
         Item newItem = itemOptional.get();
         newItem.setId(item.getId());
